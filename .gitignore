@@ -1,5 +1,6 @@
 *.o
-ll.bin
+ll.c.bin
+ll.cpp.bin
 .project
 .cproject
 .settings

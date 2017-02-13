@@ -228,6 +228,12 @@ void ll_reverse(struct ll_header* list)
                 return;
         }
 
+#define SIMPLE
+#ifdef SIMPLE
+        struct ll_node* tmp = list->tail;
+        list->tail = list->head;
+        list->head = tmp;
+#else
         /* Because this list has no actual direction, we can just swap the head
          * and tail pointers and be done with it. */
         list->head = (struct ll_node*) ((pointer) list->head
@@ -236,6 +242,7 @@ void ll_reverse(struct ll_header* list)
                         ^ (pointer) list->head);
         list->head = (struct ll_node*) ((pointer) list->head
                         ^ (pointer) list->tail);
+#endif
 
 }
 
