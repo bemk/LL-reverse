@@ -1,7 +1,16 @@
+
+#ifdef __cplusplus
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+using namespace std;
+#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#endif
 #include "ll.h"
 
 /* Let's create a pointer type that allows the compiler to do maths. Make it
@@ -75,7 +84,7 @@ static int remove_head_internal(struct ll_node** list_end)
         free(*list_end);
         /* Update the head (or taiL) position in the header */
         *list_end = next;
-        next->ptr = (struct ll_node*)ptr;
+        next->ptr = (struct ll_node*) ptr;
 
         /* Return success */
         return 0;
@@ -141,7 +150,7 @@ static long long append_implementation(struct ll_header* list, void* data,
         }
 
         /* Allocate a new node */
-        struct ll_node* node = malloc(sizeof(*node));
+        struct ll_node* node = (struct ll_node*) malloc(sizeof(*node));
         memset(node, 0, sizeof(*node));
         node->data = data;
 
@@ -175,7 +184,7 @@ long long ll_prepend(struct ll_header* list, void* data)
 
 struct ll_header* ll_create()
 {
-        struct ll_header* head = malloc(sizeof(*head));
+        struct ll_header* head = (struct ll_header*) malloc(sizeof(*head));
 
         memset(head, 0, sizeof(*head));
 
@@ -232,15 +241,27 @@ void ll_reverse(struct ll_header* list)
 
 #ifdef STANDALONE
 
+#ifdef __cplusplus
+void print_word(void* data) {
+        string* word = (string*)data;
+        cout << "Data: " << (*word) << endl;
+}
+#else
 void print_word(void* data)
 {
         char* str = (char*) data;
         printf("Data: %s\n", str);
 }
-
+#endif
 int main(int argc, char** argv)
 {
-        char* words[] = { "hello", "world", "hello", "happy", "cat" };
+#ifdef __cplusplus
+        string* words[] = {new string("hello"), new string("world"),
+                           new string("hello"), new string("happie"),
+                           new string("cat")};
+#else
+        char* words[] = { "hello", "world", "hello", "happie", "cat" };
+#endif
 
         size_t count = sizeof(words) / sizeof(char*);
         struct ll_header* list = ll_create();
@@ -264,4 +285,5 @@ int main(int argc, char** argv)
         ll_delete(list);
 
 }
+
 #endif
